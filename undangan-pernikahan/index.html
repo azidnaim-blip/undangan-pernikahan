@@ -304,9 +304,9 @@
     <source id="audio-source" src="https://cdn.pixabay.com/download/audio/2022/05/16/audio_db6591201e.mp3?filename=romantic-wedding-piano-111162.mp3" type="audio/mp3">
   </audio>
 
-  <!-- Tombol Atur Undangan Mandiri (Top Left) -->
-  <a href="editor.html" title="Atur Nama, Foto, Tanggal, Rekening Mandiri"
-     class="fixed top-5 left-5 z-40 px-3.5 py-2 rounded-full glass-card border border-gold-400 text-xs font-semibold text-gold-800 shadow-lg flex items-center gap-1.5 hover:scale-105 active:scale-95 transition-all">
+  <!-- Tombol Atur Undangan Mandiri (Hanya muncul jika parameter ?admin=1) -->
+  <a id="btn-admin-editor" href="editor.html" title="Atur Nama, Foto, Tanggal, Rekening Mandiri"
+     class="hidden fixed top-5 left-5 z-40 px-3.5 py-2 rounded-full glass-card border border-gold-400 text-xs font-semibold text-gold-800 shadow-lg items-center gap-1.5 hover:scale-105 active:scale-95 transition-all">
     <i data-lucide="sliders" class="w-4 h-4 text-gold-600"></i>
     <span class="hidden sm:inline">Atur Undangan</span>
   </a>
@@ -1325,11 +1325,29 @@
       localStorage.setItem('wedding_wishes_arya_annisa', JSON.stringify(currentWishes));
 
       renderWishes();
+
+    // Tampilkan tombol Atur Undangan hanya untuk pengantin (?admin=1)
+    if (new URLSearchParams(window.location.search).get('admin') === '1') {
+      const adminBtn = document.getElementById('btn-admin-editor');
+      if (adminBtn) {
+        adminBtn.classList.remove('hidden');
+        adminBtn.classList.add('flex');
+      }
+    }
       document.getElementById('rsvp-message').value = '';
       showToast('Ucapan & Doa berhasil dikirim!');
     });
 
     renderWishes();
+
+    // Tampilkan tombol Atur Undangan hanya untuk pengantin (?admin=1)
+    if (new URLSearchParams(window.location.search).get('admin') === '1') {
+      const adminBtn = document.getElementById('btn-admin-editor');
+      if (adminBtn) {
+        adminBtn.classList.remove('hidden');
+        adminBtn.classList.add('flex');
+      }
+    }
 
     // 7. Kirim Konfirmasi ke WhatsApp
     function sendViaWhatsApp() {

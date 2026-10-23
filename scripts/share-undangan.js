@@ -42,8 +42,10 @@ async function startServerIfNeeded() {
     return;
   }
 
-  console.log('\x1b[33m%s\x1b[0m', '⚡ Menyalakan server lokal Next.js (mohon tunggu beberapa detik)...');
-  const serverProcess = spawn('npm.cmd', ['run', 'dev'], {
+  const hasBuild = fs.existsSync(path.join(ROOT_DIR, '.next'));
+  const startArgs = hasBuild ? ['start'] : ['run', 'dev'];
+  console.log('\x1b[33m%s\x1b[0m', `⚡ Menyalakan server Next.js (${hasBuild ? 'Production Mode' : 'Dev Mode'})...`);
+  const serverProcess = spawn('npm.cmd', startArgs, {
     cwd: ROOT_DIR,
     stdio: 'ignore',
     detached: true,

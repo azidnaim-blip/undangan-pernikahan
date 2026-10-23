@@ -7,7 +7,7 @@
     "dev:network": "next dev -H 0.0.0.0",
     "share": "node scripts/share.js",
     "share:quick": "cloudflared.exe tunnel --url http://localhost:3000",
-    "build": "next build",
+    "build": "prisma generate && next build",
     "start": "next start",
     "lint": "next lint",
     "prisma:generate": "prisma generate",
