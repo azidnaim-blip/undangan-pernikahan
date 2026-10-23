@@ -26,19 +26,15 @@ Skrip ini akan otomatis menyalakan server produksi Next.js dan menghubungkan Clo
 
 ## ☁️ OPSI 2: Deploy Permanen ke Vercel (100% Gratis & Rekomendasi Utama)
 
-Platform **Vercel** adalah platform resmi pembuat Next.js. Deploy ke Vercel memberikan:
-* Domain HTTPS permanen (contoh: `https://undangan-arya-annisa.vercel.app`)
-* Server aktif 24 jam nonstop tanpa perlu laptop Anda tetap menyala
-* Server CDN super cepat (region Singapura / `sin1`)
-* Dukungan kustom domain pribadi (misal: `www.arya-annisa.com` atau `nikah.my.id`)
+Kode proyek Anda telah berhasil di-push ke GitHub:  
+👉 **[https://github.com/azidnaim-blip/undangan-pernikahan](https://github.com/azidnaim-blip/undangan-pernikahan)**
 
-### Langkah Mudah Deploy ke Vercel:
-1. **Langkah 1**: Buka berkas pembantu:  
-   👉 `Deploy-Ke-GitHub.bat` (atau buat repo di [github.com/new](https://github.com/new)).
-2. **Langkah 2**: Masukkan URL repository GitHub Anda ke skrip tersebut untuk mengunggah (*push*) kode.
-3. **Langkah 3**: Buka [vercel.com/new](https://vercel.com/new), login dengan akun GitHub Anda.
-4. **Langkah 4**: Klik tombol **"Import"** pada repository proyek ini, lalu klik **"Deploy"**.
-5. Selesai! Dalam 1-2 menit, website undangan pernikahan Anda sudah online permanen di internet.
+### Langkah Cepat Mengaktifkannya di Vercel (Hanya 1 Menit):
+1. **Langkah 1**: Buka browser ke: **[https://vercel.com/new](https://vercel.com/new)** (masuk dengan akun GitHub Anda).
+2. **Langkah 2**: Cari repository **`undangan-pernikahan`**, lalu klik tombol biru **"Import"**.
+3. **Langkah 3**: Semua pengaturan (Next.js, Region, Build Command) sudah otomatis terisi. Langsung klik tombol **"Deploy"**!
+4. **Selesai!** Dalam 1 menit, Vercel akan memberikan link domain permanen 24/7 aktif tanpa bergantung pada laptop Anda:  
+   👉 `https://undangan-pernikahan-....vercel.app`
 
 ---
 
