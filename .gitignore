@@ -15,3 +15,4 @@ cloudflared.exe
 tunnel-url.txt
 tunnel.txt
 *.tsbuildinfo
+*.zip

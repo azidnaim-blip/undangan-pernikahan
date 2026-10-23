@@ -43,12 +43,14 @@ async function startServerIfNeeded() {
   }
 
   const hasBuild = fs.existsSync(path.join(ROOT_DIR, '.next'));
-  const startArgs = hasBuild ? ['start'] : ['run', 'dev'];
+  const startBin = 'npx.cmd';
+  const startArgs = hasBuild ? ['next', 'start', '-H', '0.0.0.0', '-p', `${PORT}`] : ['next', 'dev', '-H', '0.0.0.0', '-p', `${PORT}`];
   console.log('\x1b[33m%s\x1b[0m', `⚡ Menyalakan server Next.js (${hasBuild ? 'Production Mode' : 'Dev Mode'})...`);
-  const serverProcess = spawn('npm.cmd', startArgs, {
+  const serverProcess = spawn(startBin, startArgs, {
     cwd: ROOT_DIR,
     stdio: 'ignore',
     detached: true,
+    shell: true,
   });
   serverProcess.unref();
 
