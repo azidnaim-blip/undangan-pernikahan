@@ -1,0 +1,183 @@
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  role      String   @default("CASHIER") // OWNER, CASHIER, BARISTA
+  pin       String   @default("1234")
+  phone     String?  // Nomor WA untuk notifikasi
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  shifts    Shift[]
+}
+
+model Category {
+  id        String    @id @default(cuid())
+  name      String
+  icon      String?   @default("Coffee")
+  sortOrder Int       @default(0)
+  products  Product[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Product {
+  id             String                 @id @default(cuid())
+  name           String
+  description    String?
+  price          Float
+  costPrice      Float                  @default(0) // HPP estimasi
+  image          String?
+  isAvailable    Boolean                @default(true)
+  sortOrder      Int                    @default(0)
+  categoryId     String
+  category       Category               @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  modifierGroups ProductModifierGroup[]
+  recipes        RecipeItem[]
+  orderItems     OrderItem[]
+  createdAt      DateTime               @default(now())
+  updatedAt      DateTime               @updatedAt
+}
+
+model ModifierGroup {
+  id            String                 @id @default(cuid())
+  name          String
+  selectionType String                 @default("SINGLE") // SINGLE, MULTIPLE
+  isRequired    Boolean                @default(false)
+  minSelect     Int                    @default(0)
+  maxSelect     Int                    @default(1)
+  sortOrder     Int                    @default(0)
+  options       ModifierOption[]
+  products      ProductModifierGroup[]
+  createdAt     DateTime               @default(now())
+  updatedAt     DateTime               @updatedAt
+}
+
+model ProductModifierGroup {
+  id              String        @id @default(cuid())
+  productId       String
+  modifierGroupId String
+  product         Product       @relation(fields: [productId], references: [id], onDelete: Cascade)
+  modifierGroup   ModifierGroup @relation(fields: [modifierGroupId], references: [id], onDelete: Cascade)
+
+  @@unique([productId, modifierGroupId])
+}
+
+model ModifierOption {
+  id              String        @id @default(cuid())
+  modifierGroupId String
+  modifierGroup   ModifierGroup @relation(fields: [modifierGroupId], references: [id], onDelete: Cascade)
+  name            String
+  price           Float         @default(0)
+  isDefault       Boolean       @default(false)
+  sortOrder       Int           @default(0)
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+}
+
+model Ingredient {
+  id           String       @id @default(cuid())
+  name         String
+  unit         String       @default("gr") // gr, ml, pcs, pack
+  currentStock Float        @default(0)
+  minStock     Float        @default(100) // Batas alert
+  costPerUnit  Float        @default(0) // Biaya beli per satuan
+  recipes      RecipeItem[]
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+}
+
+model RecipeItem {
+  id           String     @id @default(cuid())
+  productId    String
+  ingredientId String
+  quantity     Float // Jumlah bahan yang terpakai per 1 porsi menu
+  product      Product    @relation(fields: [productId], references: [id], onDelete: Cascade)
+  ingredient   Ingredient @relation(fields: [ingredientId], references: [id], onDelete: Cascade)
+
+  @@unique([productId, ingredientId])
+}
+
+model Shift {
+  id              String      @id @default(cuid())
+  userId          String?
+  userName        String      @default("Kasir")
+  user            User?       @relation(fields: [userId], references: [id], onDelete: SetNull)
+  startTime       DateTime    @default(now())
+  endTime         DateTime?
+  startingCash    Float       @default(0)
+  expectedCash    Float       @default(0)
+  actualCash      Float?
+  cashDifference  Float?
+  totalCashSales  Float       @default(0)
+  totalQrisSales  Float       @default(0)
+  totalPettyCash  Float       @default(0)
+  status          String      @default("OPEN") // OPEN, CLOSED
+  notes           String?
+  pettyCashRecord PettyCash[]
+  orders          Order[]
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+}
+
+model PettyCash {
+  id        String   @id @default(cuid())
+  shiftId   String
+  shift     Shift    @relation(fields: [shiftId], references: [id], onDelete: Cascade)
+  amount    Float
+  reason    String
+  createdAt DateTime @default(now())
+}
+
+model Order {
+  id            String      @id @default(cuid())
+  orderNumber   String // e.g. #001
+  customerName  String      @default("Pelanggan")
+  orderType     String      @default("TAKEAWAY") // DINE_IN, TAKEAWAY
+  paymentMethod String      @default("CASH") // CASH, QRIS
+  status        String      @default("PENDING") // PENDING, IN_PROGRESS, READY, COMPLETED, CANCELLED
+  subtotal      Float       @default(0)
+  discount      Float       @default(0)
+  total         Float       @default(0)
+  amountPaid    Float       @default(0)
+  change        Float       @default(0)
+  shiftId       String?
+  shift         Shift?      @relation(fields: [shiftId], references: [id], onDelete: SetNull)
+  items         OrderItem[]
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+}
+
+model OrderItem {
+  id            String   @id @default(cuid())
+  orderId       String
+  order         Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId     String?
+  product       Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
+  productName   String
+  quantity      Int      @default(1)
+  unitPrice     Float
+  subtotal      Float
+  notes         String?
+  modifiersJson String?  @default("[]") // Array JSON rincian kustomisasi terpilih
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model StoreSettings {
+  id               String   @id @default("default")
+  storeName        String   @default("BrewPoint")
+  storeAddress     String   @default("Jl. Kopi No. 1, Jakarta")
+  storePhone       String   @default("08123456789")
+  receiptFooter    String   @default("Terima kasih atas kunjungan Anda!")
+  printerPaperSize String   @default("58mm") // "58mm" or "80mm"
+  updatedAt        DateTime @updatedAt
+}

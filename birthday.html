@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🎂 Selamat Ulang Tahun!</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@300;400;600;700&display=swap');
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+      font-family: 'Poppins', sans-serif;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* ── Stars background ── */
+    .stars {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .star {
+      position: absolute;
+      background: white;
+      border-radius: 50%;
+      animation: twinkle 2s infinite alternate;
+    }
+
+    @keyframes twinkle {
+      from { opacity: 0.2; transform: scale(1); }
+      to   { opacity: 1;   transform: scale(1.4); }
+    }
+
+    /* ── Confetti ── */
+    .confetti-piece {
+      position: fixed;
+      width: 10px;
+      height: 14px;
+      top: -20px;
+      border-radius: 2px;
+      animation: confettiFall linear infinite;
+      z-index: 999;
+      opacity: 0.85;
+    }
+
+    @keyframes confettiFall {
+      0%   { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(110vh) rotate(720deg); opacity: 0.3; }
+    }
+
+    /* ── Main card ── */
+    .container {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.07);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 30px;
+      padding: 50px 40px;
+      max-width: 600px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.4);
+      animation: cardEntrance 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+    }
+
+    @keyframes cardEntrance {
+      from { opacity: 0; transform: scale(0.7) translateY(60px); }
+      to   { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    /* ── Cake ── */
+    .cake-wrap {
+      font-size: 90px;
+      line-height: 1;
+      margin-bottom: 10px;
+      animation: bounce 1.5s ease-in-out infinite;
+      filter: drop-shadow(0 0 20px rgba(255,200,0,0.6));
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50%       { transform: translateY(-14px) scale(1.05); }
+    }
+
+    /* ── Heading ── */
+    .headline {
+      font-family: 'Pacifico', cursive;
+      font-size: clamp(2rem, 6vw, 3.2rem);
+      background: linear-gradient(90deg, #f9d423, #ff4e50, #f9d423, #ff9a9e);
+      background-size: 300% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: shimmer 3s linear infinite;
+      margin-bottom: 6px;
+    }
+
+    @keyframes shimmer {
+      from { background-position: 0% center; }
+      to   { background-position: 300% center; }
+    }
+
+    .subtitle {
+      font-size: 1.1rem;
+      color: rgba(255,255,255,0.65);
+      margin-bottom: 30px;
+      letter-spacing: 0.05em;
+    }
+
+    /* ── Name input ── */
+    .name-section {
+      margin-bottom: 28px;
+    }
+
+    .name-input {
+      background: rgba(255,255,255,0.1);
+      border: 2px solid rgba(255,255,255,0.2);
+      border-radius: 14px;
+      color: #fff;
+      font-family: 'Poppins', sans-serif;
+      font-size: 1.1rem;
+      padding: 12px 20px;
+      width: 100%;
+      max-width: 340px;
+      text-align: center;
+      outline: none;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+    .name-input::placeholder { color: rgba(255,255,255,0.35); }
+    .name-input:focus {
+      border-color: #f9d423;
+      box-shadow: 0 0 18px rgba(249,212,35,0.35);
+    }
+
+    /* ── Message ── */
+    .message-box {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 18px;
+      padding: 24px 28px;
+      margin-bottom: 28px;
+    }
+
+    .recipient-name {
+      font-family: 'Pacifico', cursive;
+      font-size: 1.8rem;
+      color: #f9d423;
+      text-shadow: 0 0 20px rgba(249,212,35,0.5);
+      min-height: 40px;
+      transition: all 0.3s;
+    }
+
+    .message-text {
+      font-size: 1rem;
+      color: rgba(255,255,255,0.82);
+      line-height: 1.8;
+      margin-top: 14px;
+    }
+
+    .message-text span.highlight {
+      color: #ff9a9e;
+      font-weight: 600;
+    }
+
+    /* ── Balloon row ── */
+    .balloons {
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+      font-size: 2.4rem;
+      margin-bottom: 24px;
+    }
+
+    .balloon {
+      display: inline-block;
+      animation: floatBalloon 2.5s ease-in-out infinite;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .balloon:hover { transform: scale(1.4) rotate(-10deg); }
+    .balloon:nth-child(1) { animation-delay: 0s; }
+    .balloon:nth-child(2) { animation-delay: 0.4s; }
+    .balloon:nth-child(3) { animation-delay: 0.8s; }
+    .balloon:nth-child(4) { animation-delay: 1.2s; }
+    .balloon:nth-child(5) { animation-delay: 1.6s; }
+
+    @keyframes floatBalloon {
+      0%, 100% { transform: translateY(0) rotate(-5deg); }
+      50%       { transform: translateY(-12px) rotate(5deg); }
+    }
+
+    /* ── Wish button ── */
+    .wish-btn {
+      background: linear-gradient(135deg, #f9d423, #ff4e50);
+      border: none;
+      border-radius: 50px;
+      color: #fff;
+      cursor: pointer;
+      font-family: 'Poppins', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      padding: 15px 38px;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 8px 25px rgba(255,78,80,0.45);
+      text-transform: uppercase;
+    }
+    .wish-btn:hover {
+      transform: translateY(-3px) scale(1.04);
+      box-shadow: 0 12px 35px rgba(255,78,80,0.6);
+    }
+    .wish-btn:active {
+      transform: scale(0.97);
+    }
+
+    /* ── Fireworks burst ── */
+    .firework {
+      position: fixed;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      animation: fireworkBurst 0.8s ease-out forwards;
+    }
+
+    @keyframes fireworkBurst {
+      0%   { transform: translate(0,0) scale(1); opacity: 1; }
+      100% { opacity: 0; }
+    }
+
+    /* ── Footer ── */
+    .footer {
+      margin-top: 30px;
+      color: rgba(255,255,255,0.3);
+      font-size: 0.8rem;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 480px) {
+      .card { padding: 36px 22px; }
+      .cake-wrap { font-size: 70px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Stars -->
+<div class="stars" id="stars"></div>
+
+<!-- Confetti -->
+<div id="confetti"></div>
+
+<!-- Main -->
+<div class="container">
+  <div class="card">
+
+    <div class="cake-wrap">🎂</div>
+
+    <h1 class="headline">Selamat Ulang Tahun!</h1>
+    <p class="subtitle">Semoga hari istimewamu penuh kebahagiaan ✨</p>
+
+    <!-- Name input -->
+    <div class="name-section">
+      <input
+        class="name-input"
+        id="nameInput"
+        type="text"
+        maxlength="30"
+        placeholder="Masukkan nama yang berulang tahun…"
+        oninput="updateName(this.value)"
+      />
+    </div>
+
+    <!-- Message box -->
+    <div class="message-box">
+      <div class="recipient-name" id="recipientName">Sahabatku 🌟</div>
+      <p class="message-text">
+        Di hari yang sangat spesial ini, kami ingin mengucapkan<br/>
+        <span class="highlight">Selamat Ulang Tahun</span> yang penuh cinta! 🎉<br/><br/>
+        Semoga setiap langkahmu selalu diiringi <span class="highlight">kebahagiaan</span>,
+        setiap impianmu terwujud, dan setiap hari yang kamu jalani
+        selalu dipenuhi dengan <span class="highlight">senyuman & keberkahan</span>.<br/><br/>
+        Panjang umur, sehat selalu, dan semoga semua yang kamu
+        cita-citakan segera menjadi kenyataan. 🙏💖
+      </p>
+    </div>
+
+    <!-- Balloons -->
+    <div class="balloons">
+      <span class="balloon">🎈</span>
+      <span class="balloon">🎁</span>
+      <span class="balloon">🎊</span>
+      <span class="balloon">🎉</span>
+      <span class="balloon">🎈</span>
+    </div>
+
+    <!-- Button -->
+    <button class="wish-btn" onclick="celebrate()">🎆 Rayakan Sekarang!</button>
+
+  </div>
+
+  <p class="footer">Made with ❤️ &bull; 2026</p>
+</div>
+
+<script>
+  /* ── Stars ── */
+  (function createStars() {
+    const container = document.getElementById('stars');
+    for (let i = 0; i < 120; i++) {
+      const star = document.createElement('div');
+      star.className = 'star';
+      const size = Math.random() * 2.5 + 0.5;
+      star.style.cssText = `
+        width: ${size}px;
+        height: ${size}px;
+        top: ${Math.random() * 100}%;
+        left: ${Math.random() * 100}%;
+        animation-delay: ${Math.random() * 3}s;
+        animation-duration: ${1.5 + Math.random() * 2}s;
+      `;
+      container.appendChild(star);
+    }
+  })();
+
+  /* ── Confetti ── */
+  const COLORS = ['#f9d423','#ff4e50','#ff9a9e','#a18cd1','#84fab0','#43e97b','#38f9d7','#ffecd2'];
+
+  function createConfetti() {
+    const container = document.getElementById('confetti');
+    for (let i = 0; i < 60; i++) {
+      const piece = document.createElement('div');
+      piece.className = 'confetti-piece';
+      piece.style.cssText = `
+        left: ${Math.random() * 100}%;
+        background: ${COLORS[Math.floor(Math.random() * COLORS.length)]};
+        width: ${6 + Math.random() * 8}px;
+        height: ${10 + Math.random() * 10}px;
+        animation-duration: ${3 + Math.random() * 5}s;
+        animation-delay: ${Math.random() * 5}s;
+        border-radius: ${Math.random() > 0.5 ? '50%' : '2px'};
+        transform: rotate(${Math.random() * 360}deg);
+      `;
+      container.appendChild(piece);
+    }
+  }
+  createConfetti();
+
+  /* ── Name update ── */
+  function updateName(val) {
+    const el = document.getElementById('recipientName');
+    el.textContent = val.trim() ? val.trim() + ' 🌟' : 'Sahabatku 🌟';
+  }
+
+  /* ── Celebrate: fireworks burst ── */
+  function celebrate() {
+    for (let i = 0; i < 80; i++) {
+      setTimeout(() => launchFirework(), Math.random() * 1200);
+    }
+    // Shake card
+    const card = document.querySelector('.card');
+    card.style.animation = 'none';
+    card.offsetHeight; // reflow
+    card.style.animation = 'shakeCard 0.5s ease';
+    setTimeout(() => card.style.animation = '', 600);
+  }
+
+  function launchFirework() {
+    const x = Math.random() * window.innerWidth;
+    const y = Math.random() * window.innerHeight * 0.7;
+    const color = COLORS[Math.floor(Math.random() * COLORS.length)];
+    const count = 12;
+
+    for (let i = 0; i < count; i++) {
+      const dot = document.createElement('div');
+      dot.className = 'firework';
+      dot.style.cssText = `
+        left: ${x}px;
+        top: ${y}px;
+        background: ${color};
+        box-shadow: 0 0 6px ${color};
+      `;
+      document.body.appendChild(dot);
+
+      const angle = (i / count) * Math.PI * 2;
+      const dist = 40 + Math.random() * 80;
+      const tx = Math.cos(angle) * dist;
+      const ty = Math.sin(angle) * dist;
+
+      dot.animate([
+        { transform: 'translate(0,0) scale(1)', opacity: 1 },
+        { transform: `translate(${tx}px, ${ty}px) scale(0)`, opacity: 0 }
+      ], {
+        duration: 700 + Math.random() * 400,
+        easing: 'ease-out',
+        fill: 'forwards'
+      }).onfinish = () => dot.remove();
+    }
+  }
+
+  /* ── Card shake keyframe (injected) ── */
+  const style = document.createElement('style');
+  style.textContent = `
+    @keyframes shakeCard {
+      0%,100% { transform: rotate(0deg) scale(1); }
+      20% { transform: rotate(-2deg) scale(1.02); }
+      40% { transform: rotate(2deg) scale(1.02); }
+      60% { transform: rotate(-1.5deg) scale(1.01); }
+      80% { transform: rotate(1.5deg) scale(1.01); }
+    }
+  `;
+  document.head.appendChild(style);
+</script>
+</body>
+</html>

@@ -1,0 +1,254 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&family=JetBrains+Mono:wght@400;500;600;700;800&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 24, 22, 21;
+  --background-rgb: 248, 246, 242;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  color: #181615;
+  background-color: #F8F6F2;
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(194, 85, 45, 0.05) 0px, transparent 45%),
+    radial-gradient(at 100% 100%, rgba(194, 85, 45, 0.04) 0px, transparent 45%),
+    radial-gradient(at 50% 30%, rgba(255, 255, 255, 0.8) 0px, transparent 80%);
+  font-family: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "SF Pro", system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  letter-spacing: -0.015em;
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11", "calt";
+  user-select: none;
+  -webkit-user-select: none;
+  overflow-x: hidden;
+}
+
+/* Apple Liquid Glass Utility */
+.apple-glass {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(28px) saturate(200%);
+  -webkit-backdrop-filter: blur(28px) saturate(200%);
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  box-shadow: inset 0 1px 1px 0 rgba(255, 255, 255, 0.9), 0 4px 24px rgba(0, 0, 0, 0.02);
+}
+
+.apple-glass-card {
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: inset 0 1px 1px 0 rgba(255, 255, 255, 0.8), 0 1px 3px rgba(0, 0, 0, 0.02), 0 8px 24px rgba(0, 0, 0, 0.03);
+}
+
+.apple-glass-panel {
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(32px) saturate(190%);
+  -webkit-backdrop-filter: blur(32px) saturate(190%);
+}
+
+.boutique-card {
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(30, 25, 22, 0.05);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9), 0 2px 10px rgba(28, 25, 23, 0.02), 0 12px 28px -4px rgba(28, 25, 23, 0.04);
+}
+
+/* Apple Segmented Control Pill */
+.apple-segmented-item-active {
+  background: #FFFFFF;
+  color: #181615;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+/* Tabular figures for numbers, currency, and timestamps */
+.tabular-nums, .font-mono {
+  font-feature-settings: "tnum" 1, "zero" 1;
+}
+
+/* Apple Soft Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(142, 142, 147, 0.35);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(142, 142, 147, 0.6);
+}
+
+/* Hide scrollbar utility */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Mobile Drawer & Bottom Sheet Animations */
+@keyframes slideRight {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.animate-slide-right {
+  animation: slideRight 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-8px); }
+  40%, 80% { transform: translateX(8px); }
+}
+
+.animate-shake {
+  animation: shake 0.4s ease-in-out;
+}
+
+/* Print Styles for 58mm & 80mm Thermal Receipt Printers */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+
+  #thermal-receipt,
+  #thermal-receipt * {
+    visibility: visible;
+  }
+
+  #thermal-receipt {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100% !important;
+    max-width: 80mm;
+    margin: 0;
+    padding: 2mm 3mm;
+    color: #000 !important;
+    background: #fff !important;
+    font-family: -apple-system, BlinkMacSystemFont, 'Courier New', Courier, monospace;
+    font-size: 11px;
+    line-height: 1.25;
+  }
+
+  @page {
+    margin: 0;
+    size: auto;
+  }
+}
+
+/* ========================================================================== */
+/* Wedding Luxury Fonts & Visual Background Effects                           */
+/* ========================================================================== */
+.font-cormorant {
+  font-family: "Cormorant Garamond", Georgia, serif;
+}
+.font-playfair {
+  font-family: "Playfair Display", Georgia, serif;
+}
+.font-cursive {
+  font-family: "Great Vibes", cursive;
+}
+
+/* Luxury Champagne Canvas Background with Subtle Dots & Ambient Gradients */
+.bg-luxury-canvas {
+  background-color: #FAF7F2;
+  background-image: 
+    radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.14) 0%, transparent 60%),
+    radial-gradient(circle at 100% 30%, rgba(245, 231, 178, 0.16) 0%, transparent 45%),
+    radial-gradient(circle at 0% 70%, rgba(212, 175, 55, 0.12) 0%, transparent 50%),
+    radial-gradient(#D4AF37 0.8px, transparent 0.8px),
+    radial-gradient(#FAF7F2 0.8px, #FAF7F2 0.8px);
+  background-size: 100% 100%, 100% 100%, 100% 100%, 32px 32px, 32px 32px;
+  background-position: 0 0, 0 0, 0 0, 0 0, 16px 16px;
+}
+
+/* Swaying Keyframes for Botanical Corner Foliage */
+@keyframes floralSwayLeft {
+  0%, 100% { transform: rotate(0deg) scale(1); }
+  50% { transform: rotate(3deg) scale(1.02); }
+}
+@keyframes floralSwayRight {
+  0%, 100% { transform: rotate(0deg) scale(1); }
+  50% { transform: rotate(-3deg) scale(1.02); }
+}
+@keyframes goldShimmer {
+  0%, 100% { filter: drop-shadow(0 0 4px rgba(212, 175, 55, 0.35)); opacity: 0.92; }
+  50% { filter: drop-shadow(0 0 12px rgba(245, 230, 160, 0.8)); opacity: 1; }
+}
+
+.animate-sway-left {
+  animation: floralSwayLeft 7s ease-in-out infinite;
+  transform-origin: top left;
+}
+.animate-sway-right {
+  animation: floralSwayRight 8s ease-in-out infinite;
+  transform-origin: top right;
+}
+.animate-sway-bottom-right {
+  animation: floralSwayRight 7.5s ease-in-out infinite;
+  transform-origin: bottom right;
+}
+.animate-shimmer {
+  animation: goldShimmer 4s ease-in-out infinite;
+}
+
+/* Floating Golden Petals / Sparkles Background */
+@keyframes fallingPetal1 {
+  0% { transform: translateY(-20px) rotate(0deg) translateX(0); opacity: 0; }
+  15% { opacity: 0.75; }
+  85% { opacity: 0.75; }
+  100% { transform: translateY(105vh) rotate(260deg) translateX(55px); opacity: 0; }
+}
+@keyframes fallingPetal2 {
+  0% { transform: translateY(-20px) rotate(0deg) translateX(0); opacity: 0; }
+  15% { opacity: 0.85; }
+  85% { opacity: 0.85; }
+  100% { transform: translateY(105vh) rotate(-220deg) translateX(-45px); opacity: 0; }
+}
+
+.petal {
+  position: fixed;
+  pointer-events: none;
+  z-index: 35;
+  background: radial-gradient(circle at 40% 40%, #FFF5D6 0%, #D4AF37 60%, #AA7A1E 100%);
+  border-radius: 12px 2px 12px 2px;
+  filter: drop-shadow(0 0 5px rgba(212, 175, 55, 0.5));
+}
+.petal-1 { width: 11px; height: 15px; left: 12%; animation: fallingPetal1 13s linear infinite; animation-delay: 0s; }
+.petal-2 { width: 8px; height: 12px; left: 34%; animation: fallingPetal2 16s linear infinite; animation-delay: 3.5s; }
+.petal-3 { width: 13px; height: 17px; left: 62%; animation: fallingPetal1 15s linear infinite; animation-delay: 7s; }
+.petal-4 { width: 9px; height: 13px; left: 84%; animation: fallingPetal2 17s linear infinite; animation-delay: 1.5s; }
+.petal-5 { width: 7px; height: 10px; left: 94%; animation: fallingPetal1 19s linear infinite; animation-delay: 9s; }
+.petal-6 { width: 10px; height: 14px; left: 24%; animation: fallingPetal2 14s linear infinite; animation-delay: 5s; }
+

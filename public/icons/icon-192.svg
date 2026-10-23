@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192" width="192" height="192">
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#C2552D"/>
+      <stop offset="50%" stop-color="#B54B24"/>
+      <stop offset="100%" stop-color="#7C2A0E"/>
+    </linearGradient>
+    <linearGradient id="steamGradient" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Squircle App Background -->
+  <rect width="192" height="192" rx="42" fill="url(#bgGradient)"/>
+
+  <!-- Subtle Inner Border Highlight -->
+  <rect x="2" y="2" width="188" height="188" rx="40" fill="none" stroke="#FFFFFF" stroke-opacity="0.25" stroke-width="2"/>
+
+  <!-- Coffee Cup Graphics -->
+  <g transform="translate(36, 42)">
+    <!-- Steam Curves -->
+    <path d="M34,22 C32,12 36,4 34,0" fill="none" stroke="url(#steamGradient)" stroke-width="4" stroke-linecap="round"/>
+    <path d="M52,20 C50,10 54,2 52,0" fill="none" stroke="url(#steamGradient)" stroke-width="4" stroke-linecap="round"/>
+    <path d="M70,22 C68,12 72,4 70,0" fill="none" stroke="url(#steamGradient)" stroke-width="4" stroke-linecap="round"/>
+
+    <!-- Cup Body -->
+    <path d="M12,32 L92,32 C92,72 74,90 52,90 C30,90 12,72 12,32 Z" fill="#FFFFFF"/>
+    
+    <!-- Inner Coffee Surface -->
+    <ellipse cx="52" cy="34" rx="36" ry="7" fill="#4A1E0D"/>
+    <!-- Latte Art Heart/Drop -->
+    <path d="M52,32 C48,29 44,32 52,37 C60,32 56,29 52,32 Z" fill="#FDF3EE"/>
+
+    <!-- Cup Handle -->
+    <path d="M90,40 C108,40 108,70 90,70" fill="none" stroke="#FFFFFF" stroke-width="9" stroke-linecap="round"/>
+
+    <!-- Saucer / Plate -->
+    <path d="M0,96 C0,96 16,104 52,104 C88,104 104,96 104,96" fill="none" stroke="#FFFFFF" stroke-width="8" stroke-linecap="round"/>
+  </g>
+</svg>
