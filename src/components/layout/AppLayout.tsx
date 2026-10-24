@@ -12,6 +12,11 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   // Jika sedang membuka halaman undangan (/ atau /undangan*) atau halaman pengantin (/pengantin*), sembunyikan seluruh sidebar, auth & layout POS
   const isWedding = !pathname || pathname === '/' || pathname.startsWith('/undangan') || pathname.startsWith('/pengantin');
   const isCustomerDisplay = pathname === '/customer-display';
+  const isDownload = pathname === '/download';
+
+  if (isDownload) {
+    return <div className="w-full min-h-screen bg-[#F8F6F2]">{children}</div>;
+  }
 
   if (isWedding) {
     return <div className="w-full min-h-screen bg-transparent">{children}</div>;

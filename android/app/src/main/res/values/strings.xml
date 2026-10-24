@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">BrewPoint POS</string>
+    <string name="title_activity_main">BrewPoint POS</string>
+    <string name="package_name">com.brewpoint.pos</string>
+    <string name="custom_url_scheme">com.brewpoint.pos</string>
+</resources>

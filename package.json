@@ -12,9 +12,14 @@
     "lint": "next lint",
     "prisma:generate": "prisma generate",
     "prisma:push": "prisma db push",
-    "prisma:seed": "node prisma/seed.js"
+    "prisma:seed": "node prisma/seed.js",
+    "db:postgres": "node scripts/switch-db.js postgres && prisma generate",
+    "db:sqlite": "node scripts/switch-db.js sqlite && prisma generate"
   },
   "dependencies": {
+    "@capacitor/android": "^8.5.3",
+    "@capacitor/cli": "^8.5.3",
+    "@capacitor/core": "^8.5.3",
     "@prisma/client": "^5.20.0",
     "clsx": "^2.1.1",
     "cors": "^2.8.6",

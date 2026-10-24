@@ -1,0 +1,102 @@
+name: Build & Release Android APK (BrewPoint POS)
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - 'src/**'
+      - 'public/**'
+      - 'android/**'
+      - 'package.json'
+      - 'capacitor.config.ts'
+      - '.github/workflows/build-apk.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-android:
+    name: Build Android APK
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Setup Java JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+
+      - name: Install Node Dependencies
+        run: npm ci
+
+      - name: Generate Prisma Client
+        run: npx prisma generate
+
+      - name: Build Next.js Application
+        run: npm run build
+        env:
+          DATABASE_URL: "file:./dev.db"
+          NEXT_TELEMETRY_DISABLED: 1
+
+      - name: Sync Web Assets to Android
+        run: npx cap sync android
+
+      - name: Build Android APK with Gradle
+        working-directory: ./android
+        run: |
+          chmod +x ./gradlew
+          ./gradlew assembleDebug --no-daemon --stacktrace
+
+      - name: Prepare APK Asset
+        run: |
+          mkdir -p release-output
+          cp android/app/build/outputs/apk/debug/app-debug.apk release-output/brewpoint-pos.apk
+          cp android/app/build/outputs/apk/debug/app-debug.apk release-output/brewpoint-pos-v1.0.${{ github.run_number }}.apk
+          echo "APK successfully built and prepared!"
+
+      - name: Upload APK to GitHub Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: brewpoint-pos-apk
+          path: release-output/brewpoint-pos.apk
+          retention-days: 30
+
+      - name: Create or Update GitHub Release
+        uses: softprops/action-gh-release@v2
+        if: github.ref == 'refs/heads/main'
+        with:
+          tag_name: v1.0.${{ github.run_number }}
+          name: "BrewPoint POS v1.0.${{ github.run_number }}"
+          body: |
+            ### ☕ BrewPoint POS & KDS - Android Installer APK
+            
+            Build otomatis berhasil di-generate oleh GitHub Actions CI/CD.
+            
+            #### 📥 Download Link:
+            - **Universal APK**: [brewpoint-pos.apk](https://github.com/${{ github.repository }}/releases/download/v1.0.${{ github.run_number }}/brewpoint-pos.apk)
+            - **Versi Build**: `v1.0.${{ github.run_number }}`
+            - **Tanggal Rilis**: ${{ github.event.head_commit.timestamp || 'Latest' }}
+            
+            #### 📲 Cara Install di HP Android:
+            1. Download file `brewpoint-pos.apk` di atas.
+            2. Ketuk notifikasi download atau buka dari folder Downloads di HP.
+            3. Jika muncul pop-up peringatan, pilih **"Izinkan dari sumber ini"** atau **"Tetap Install"**.
+            4. Aplikasi BrewPoint POS siap digunakan untuk kasir, barista, dan owner!
+          files: |
+            release-output/brewpoint-pos.apk
+            release-output/brewpoint-pos-v1.0.${{ github.run_number }}.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -27,7 +27,8 @@ import {
   Eye,
   Shield,
   ChefHat,
-  UserCheck
+  UserCheck,
+  Smartphone
 } from 'lucide-react';
 import { playSoundEffect } from '@/lib/utils';
 
@@ -91,6 +92,7 @@ export default function Sidebar() {
       roles: ['OWNER', 'CASHIER']
     },
     { href: '/customer-display', label: 'Layar Pelanggan', icon: Monitor, target: '_blank', roles: ['OWNER', 'CASHIER'] },
+    { href: '/download', label: 'Unduh APK Android', icon: Smartphone, roles: ['OWNER', 'CASHIER', 'BARISTA'] },
     { href: '/team', label: 'Manajemen Tim', icon: Users, roles: ['OWNER'] },
     { href: '/settings', label: 'Pengaturan Toko', icon: Settings, roles: ['OWNER'] },
   ];
