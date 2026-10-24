@@ -8,7 +8,7 @@ on:
       - 'public/**'
       - 'android/**'
       - 'package.json'
-      - 'capacitor.config.ts'
+      - 'capacitor.config.json'
       - '.github/workflows/build-apk.yml'
   workflow_dispatch:
 
@@ -24,20 +24,16 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Setup Node.js 20
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'npm'
 
       - name: Setup Java JDK 21
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: 'temurin'
           java-version: '21'
-
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v3
 
       - name: Install Node Dependencies
         run: npm install
@@ -45,23 +41,20 @@ jobs:
       - name: Generate Prisma Client
         run: npx prisma generate
 
-      - name: Build Next.js Application
+      - name: Build Next.js Web App
         run: npm run build
         env:
           DATABASE_URL: "file:./dev.db"
           NEXT_TELEMETRY_DISABLED: 1
 
-      - name: Make Gradle Wrapper Executable
-        run: chmod +x android/gradlew
-
-      - name: Sync Web Assets to Android
+      - name: Copy Web Assets to Android
         run: npx cap copy android
 
       - name: Build Android APK with Gradle
         working-directory: ./android
         run: |
           chmod +x ./gradlew
-          ./gradlew assembleDebug --no-daemon --stacktrace
+          ./gradlew assembleDebug --no-daemon --no-build-cache --stacktrace
 
       - name: Prepare APK Asset
         run: |
@@ -96,7 +89,7 @@ jobs:
             #### 📲 Cara Install di HP Android:
             1. Download file `brewpoint-pos.apk` di atas.
             2. Ketuk notifikasi download atau buka dari folder Downloads di HP.
-            3. Jika muncul pop-up peringatan, pilih **"Izinkan dari sumber ini"** atau **"Tetap Install"**.
+            3. Jika muncul pop-up peringatan Play Protect, pilih **"Izinkan dari sumber ini"** atau **"Tetap Install"**.
             4. Aplikasi BrewPoint POS siap digunakan untuk kasir, barista, dan owner!
           files: |
             release-output/brewpoint-pos.apk
