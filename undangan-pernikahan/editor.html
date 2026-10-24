@@ -228,6 +228,11 @@
             <span>Unduh File .js</span>
           </button>
 
+          <button type="button" onclick="copyConfigJs()" class="px-4 py-2.5 rounded-xl border border-amber-600 bg-amber-50 hover:bg-amber-100 text-amber-900 text-xs font-semibold flex items-center justify-center gap-2 transition-all">
+            <i data-lucide="copy" class="w-4 h-4"></i>
+            <span>Salin Kode Konfigurasi</span>
+          </button>
+
           <button type="submit" class="flex-1 sm:flex-none px-6 py-2.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold flex items-center justify-center gap-2 shadow-md hover:shadow-lg transition-all">
             <i data-lucide="save" class="w-4 h-4"></i>
             <span>Simpan Perubahan</span>
@@ -241,6 +246,66 @@
       </div>
 
     </form>
+
+    <!-- 6. BAGIKAN LINK KE TAMU (WHATSAPP GENERATOR) -->
+    <div class="bg-gradient-to-br from-amber-50 to-orange-50/60 p-6 sm:p-10 border-t border-amber-200">
+      <div class="flex items-center gap-2.5 mb-2">
+        <div class="p-2 rounded-xl bg-emerald-600 text-white">
+          <i data-lucide="share-2" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <h2 class="text-base sm:text-lg font-bold text-amber-950 font-serif">Generator Link Undangan Tamu (WhatsApp)</h2>
+          <p class="text-stone-600 text-xs">Buat link personal dengan nama tamu dan kirimkan langsung via WhatsApp dengan 1 kali klik.</p>
+        </div>
+      </div>
+
+      <div class="mt-5 space-y-4">
+        <div>
+          <label class="block text-xs font-bold text-stone-800 mb-1.5">Nama Tamu / Keluarga yang Diundang</label>
+          <div class="flex gap-2">
+            <input type="text" id="guest-name-input" placeholder="Contoh: Bapak Hendra & Keluarga" 
+                   class="flex-1 px-4 py-2.5 text-xs rounded-xl border border-stone-300 focus:ring-2 focus:ring-emerald-500 focus:outline-none bg-white">
+            <button type="button" onclick="generateGuestShare()" 
+                    class="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold flex items-center gap-1.5 shadow transition-all">
+              <i data-lucide="sparkles" class="w-4 h-4"></i>
+              <span>Buat Link</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Result Box -->
+        <div id="share-result-box" class="p-4 rounded-2xl bg-white border border-emerald-200 shadow-sm space-y-3">
+          <div>
+            <label class="block text-[11px] font-semibold text-stone-500 mb-1">Link Undangan Khusus Tamu:</label>
+            <div class="flex gap-2 items-center">
+              <input type="text" id="guest-generated-url" readonly 
+                     class="flex-1 px-3 py-2 text-xs rounded-lg bg-stone-50 border border-stone-200 text-stone-700 font-mono select-all">
+              <button type="button" onclick="copyGuestUrl()" class="px-3.5 py-2 rounded-lg bg-stone-100 hover:bg-stone-200 border border-stone-300 text-xs font-semibold text-stone-800 flex items-center gap-1">
+                <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+                <span id="copy-guest-url-btn-text">Salin</span>
+              </button>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-[11px] font-semibold text-stone-500 mb-1">Preview Pesan WhatsApp:</label>
+            <textarea id="guest-wa-preview" rows="4" readonly 
+                      class="w-full p-3 text-xs rounded-lg bg-stone-50 border border-stone-200 text-stone-700 font-sans leading-relaxed"></textarea>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-2 pt-1">
+            <button type="button" onclick="sendGuestWhatsApp()" class="flex-1 sm:flex-none px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold flex items-center justify-center gap-2 shadow transition-all">
+              <i data-lucide="message-circle" class="w-4 h-4"></i>
+              <span>Kirim Langsung ke WhatsApp</span>
+            </button>
+            <button type="button" onclick="copyGuestWaText()" class="flex-1 sm:flex-none px-4 py-2.5 rounded-xl bg-stone-100 hover:bg-stone-200 border border-stone-300 text-stone-800 text-xs font-semibold flex items-center justify-center gap-2 transition-all">
+              <i data-lucide="clipboard-copy" class="w-4 h-4"></i>
+              <span id="copy-guest-text-btn-text">Salin Teks WhatsApp</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <script src="./wedding-config.js"></script>
@@ -302,6 +367,29 @@
       reader.readAsDataURL(file);
     }
 
+    // Helper copy text to clipboard
+    function copyToClipboard(text, btnTextElId, successMessage) {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(() => {
+          const btn = document.getElementById(btnTextElId);
+          if (btn) {
+            const original = btn.textContent;
+            btn.textContent = "Tersalin!";
+            setTimeout(() => { btn.textContent = original; }, 2000);
+          }
+          alert(successMessage || "Berhasil disalin ke clipboard!");
+        });
+      } else {
+        const temp = document.createElement('textarea');
+        temp.value = text;
+        document.body.appendChild(temp);
+        temp.select();
+        document.execCommand('copy');
+        document.body.removeChild(temp);
+        alert(successMessage || "Berhasil disalin ke clipboard!");
+      }
+    }
+
     // Simpan Form
     document.getElementById('editor-form').addEventListener('submit', function(e) {
       e.preventDefault();
@@ -346,21 +434,29 @@
       base.whatsappNumber = document.getElementById('wa-number').value;
 
       localStorage.setItem('custom_wedding_data', JSON.stringify(base));
-      alert("✅ Perubahan berhasil disimpan! Anda sekarang dapat membuka undangan untuk melihat hasilnya.");
-      window.location.href = 'index.html';
+      
+      // Update generator tamu otomatis
+      generateGuestShare();
+
+      alert("✅ Perubahan berhasil disimpan!\n\nLink undangan dan pesan WhatsApp untuk tamu di bagian bawah halaman telah diperbarui.");
     });
 
     function resetToDefault() {
       if (confirm("Apakah Anda yakin ingin mengembalikan semua data ke template awal?")) {
         localStorage.removeItem('custom_wedding_data');
         loadCurrentData();
+        generateGuestShare();
         alert("Data telah dikembalikan ke template awal.");
       }
     }
 
-    function downloadConfigJs() {
+    function getActiveData() {
       const stored = localStorage.getItem('custom_wedding_data');
-      const data = stored ? JSON.parse(stored) : WEDDING_DATA;
+      return stored ? JSON.parse(stored) : (typeof WEDDING_DATA !== 'undefined' ? WEDDING_DATA : {});
+    }
+
+    function downloadConfigJs() {
+      const data = getActiveData();
       const content = "// KONFIGURASI DATA UNDANGAN PERNIKAHAN DIGITAL\nconst WEDDING_DATA = " + JSON.stringify(data, null, 2) + ";\n\nif (typeof module !== 'undefined' && module.exports) {\n  module.exports = WEDDING_DATA;\n}\n";
       const blob = new Blob([content], { type: 'text/javascript' });
       const a = document.createElement('a');
@@ -369,7 +465,77 @@
       a.click();
     }
 
+    function copyConfigJs() {
+      const data = getActiveData();
+      const content = "// KONFIGURASI DATA UNDANGAN PERNIKAHAN DIGITAL\nconst WEDDING_DATA = " + JSON.stringify(data, null, 2) + ";\n\nif (typeof module !== 'undefined' && module.exports) {\n  module.exports = WEDDING_DATA;\n}\n";
+      copyToClipboard(content, null, "✅ Kode konfigurasi wedding-config.js berhasil disalin! Anda dapat mengirimkannya ke chat ini agar kami update permanen di GitHub Pages.");
+    }
+
+    // Generator Link & Pesan WhatsApp Tamu
+    function getBasePublicUrl() {
+      // Gunakan origin dan path GitHub Pages yang sebenarnya
+      const host = window.location.hostname;
+      if (host.includes('github.io')) {
+        return window.location.origin + window.location.pathname.replace(/\/editor\.html$/, '') + '/';
+      }
+      return 'https://azidnaim-blip.github.io/undangan-pernikahan/';
+    }
+
+    function generateGuestShare() {
+      const data = getActiveData();
+      const guestInput = document.getElementById('guest-name-input');
+      const guestName = (guestInput && guestInput.value.trim()) ? guestInput.value.trim() : 'Bapak/Ibu/Saudara/i';
+      
+      const baseUrl = getBasePublicUrl();
+      const guestUrl = `${baseUrl}?to=${encodeURIComponent(guestName)}`;
+      
+      const gNick = data.groom?.nickname || 'Arya';
+      const bNick = data.bride?.nickname || 'Annisa';
+      const displayDate = data.displayDate || 'Sabtu, 28 November 2026';
+      const venue = data.events?.akad?.venue || data.events?.resepsi?.venue || 'Lokasi Acara';
+
+      const waMessage = 
+`Kepada Yth.
+*${guestName}*
+
+Assalamu’alaikum Warahmatullahi Wabarakatuh / Salam Sejahtera,
+
+Tanpa mengurangi rasa hormat, perkenankan kami mengundang Bapak/Ibu/Saudara/i untuk menghadiri dan memberikan doa restu pada hari bahagia pernikahan kami:
+
+🤵👰 *${gNick} & ${bNick}*
+🗓️ Hari/Tanggal: *${displayDate}*
+📍 Tempat: *${venue}*
+
+Untuk informasi lengkap rundown acara, maps lokasi, serta konfirmasi kehadiran, silakan buka tautan undangan digital kami berikut:
+👉 ${guestUrl}
+
+Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu.
+
+Terima kasih.
+Wassalamu’alaikum Warahmatullahi Wabarakatuh.`;
+
+      document.getElementById('guest-generated-url').value = guestUrl;
+      document.getElementById('guest-wa-preview').value = waMessage;
+    }
+
+    function copyGuestUrl() {
+      const url = document.getElementById('guest-generated-url').value;
+      copyToClipboard(url, 'copy-guest-url-btn-text', "Link khusus tamu berhasil disalin!");
+    }
+
+    function copyGuestWaText() {
+      const text = document.getElementById('guest-wa-preview').value;
+      copyToClipboard(text, 'copy-guest-text-btn-text', "Pesan undangan WhatsApp berhasil disalin!");
+    }
+
+    function sendGuestWhatsApp() {
+      const text = document.getElementById('guest-wa-preview').value;
+      const waUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`;
+      window.open(waUrl, '_blank');
+    }
+
     loadCurrentData();
+    generateGuestShare();
   </script>
 </body>
 </html>
