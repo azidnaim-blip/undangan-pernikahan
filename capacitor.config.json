@@ -1,0 +1,22 @@
+{
+  "appId": "com.brewpoint.pos",
+  "appName": "BrewPoint POS",
+  "webDir": "public",
+  "server": {
+    "url": "https://brewpoint-pos.vercel.app",
+    "cleartext": true,
+    "androidScheme": "https"
+  },
+  "android": {
+    "allowMixedContent": true,
+    "captureInput": true,
+    "webContentsDebuggingEnabled": true
+  },
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 1500,
+      "backgroundColor": "#181615",
+      "showSpinner": false
+    }
+  }
+}
