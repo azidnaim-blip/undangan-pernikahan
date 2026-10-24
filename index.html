@@ -990,9 +990,54 @@
   <!-- ======================================================================== -->
   <script src="./wedding-config.js"></script>
   <script>
-    // 0. Ambil konfigurasi (dari localStorage jika ada hasil edit mandiri, atau default dari wedding-config.js)
-    const storedCustom = localStorage.getItem('custom_wedding_data');
-    const DATA = storedCustom ? JSON.parse(storedCustom) : WEDDING_DATA;
+    // Helper Deep Merge Object
+    function deepMerge(target, source) {
+      if (!source || typeof source !== 'object') return target;
+      const output = Object.assign({}, target);
+      for (const key of Object.keys(source)) {
+        if (source[key] instanceof Object && !Array.isArray(source[key]) && key in target) {
+          output[key] = deepMerge(target[key], source[key]);
+        } else if (source[key] !== undefined && source[key] !== null && source[key] !== '') {
+          output[key] = source[key];
+        }
+      }
+      return output;
+    }
+
+    // 0. Ambil konfigurasi (Prioritas: Hash URL -> LocalStorage -> WEDDING_DATA default)
+    function initWeddingData() {
+      let data = (typeof WEDDING_DATA !== 'undefined') ? JSON.parse(JSON.stringify(WEDDING_DATA)) : {};
+      
+      // A. Cek apakah ada data kustom terenkode di URL hash (#d=...)
+      try {
+        const hash = window.location.hash;
+        if (hash && hash.includes('d=')) {
+          const match = hash.match(/d=([^&]+)/);
+          if (match && match[1]) {
+            const decodedJson = decodeURIComponent(escape(atob(decodeURIComponent(match[1]))));
+            const parsed = JSON.parse(decodedJson);
+            data = deepMerge(data, parsed);
+          }
+        }
+      } catch (err) {
+        console.warn('Gagal memuat data dari URL Hash:', err);
+      }
+
+      // B. Cek apakah ada data edit di LocalStorage perangkat ini
+      try {
+        const storedCustom = localStorage.getItem('custom_wedding_data');
+        if (storedCustom) {
+          const parsedStored = JSON.parse(storedCustom);
+          data = deepMerge(data, parsedStored);
+        }
+      } catch (err) {
+        console.warn('Gagal memuat data dari LocalStorage:', err);
+      }
+
+      return data;
+    }
+
+    const DATA = initWeddingData();
 
     // Terapkan data dinamis ke elemen-elemen DOM
     function applyDynamicData() {
