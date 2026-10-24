@@ -55,7 +55,7 @@ jobs:
         run: chmod +x android/gradlew
 
       - name: Sync Web Assets to Android
-        run: npx cap sync android --inline
+        run: npx cap sync android || npx cap copy android
 
       - name: Build Android APK with Gradle
         working-directory: ./android
